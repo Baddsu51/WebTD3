@@ -10,7 +10,7 @@ export const Students = () => {
 
   useEffect(() => {
     (async () => {
-      const students = await fetchStudents();
+      await fetchStudents();
     })();
   });
 
@@ -21,15 +21,33 @@ export const Students = () => {
 
   const addStudent = async (name: string, firstname: string, age: number) => {
     const student = {
-    name: name,
-    firstname: firstname,
-    age: age,
+      name: name,
+      firstname: firstname,
+      age: age,
     };
     const newStudent = (
-    await axios.post(`http://localhost:5000/students`, student)
-    ).data;
+      await axios.post(`http://localhost:5000/students`, student)
+    ).data; // On récupère l'étudiant créé avec son id généré par la base de données
     setStudents([...students, newStudent]);
-    };
+  };
+
+  const editStudent = async (data: Partial<StudentType>) => {
+    const updatedStudent = (
+      await axios.put(`http://localhost:5000/students/${data._id}`, data)
+    ).data;
+    const studentsUpdated = students.map((student) => {
+      if (student._id === updatedStudent._id) {
+        student = updatedStudent;
+      }
+      return student;
+    });
+    setStudents(studentsUpdated);
+  };
+
+  const deleteStudent = (id: string) => {
+    axios.delete(`http://localhost:5000/students/${id}`);
+    setStudents(students.filter((student) => student._id !== id));
+  };
 
   return (
     <>
@@ -38,13 +56,19 @@ export const Students = () => {
         {students.length > 0 ? (
           students.map((student) => (
             <div>
-              <Student key={student._id} student={student} />
+              <Student
+                key={student._id}
+                student={student}
+                onEdit={editStudent}
+                onDelete={deleteStudent}
+              />
             </div>
           ))
         ) : (
           <div>Aucun étudiant à afficher</div>
         )}
         <Divider />
+        <h3>Ajouter un nouvel étudiant :</h3>
         <AddStudent onAdd={addStudent} />
       </div>
     </>

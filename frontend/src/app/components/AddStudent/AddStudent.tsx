@@ -28,6 +28,20 @@ export const AddStudent = ({ onAdd }: AddStudentProps) => {
           >
             <Input onChange={(e) => setName(e.target.value)} />
           </Form.Item>
+          <Form.Item
+            label="Prénom"
+            name="firstname"
+            rules={[{ required: true, message: "Le prénom est obligatoire !" }]}
+          >
+            <Input onChange={(e) => setFirstname(e.target.value)} />
+          </Form.Item>
+          <Form.Item
+            label="Age"
+            name="age"
+            rules={[{ required: true, message: "L'âge est obligatoire !" }]}
+          >
+            <Input onChange={(e) => setAge(parseInt(e.target.value))} />
+          </Form.Item>
           <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
             <Button type="primary" htmlType="submit">
               Ajouter
