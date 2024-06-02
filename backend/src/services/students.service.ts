@@ -1,38 +1,31 @@
-import { Types } from "mongoose";
 import { Student, StudentModel } from "../models/students.model";
+import { Types } from "mongoose";
 
-const getStudents = async () => {
-  return await StudentModel.find();
+// la fonction devient asynchrone pour attendre la réponse de la base de données
+export const getStudents = async () => {
+    return await StudentModel.find();
 };
 
-const getStudent = async (id: string) => {
-  return await StudentModel.findOne({ _id: new Types.ObjectId(id) });
-};
+export const getStudent = async (id: string) => {
+    // return await StudentModel.findOne({ _id: new Types.ObjectId(id) });
+    return await StudentModel.findById(id);
+}
 
-const createStudent = async (studentToCreate: Student) => {
-  const newStudent = new StudentModel(studentToCreate);
-  await newStudent.save();
-  return getStudents();
-};
+export const createStudent = async (name: string, firstname: string, age: number) => {
+    let student = {
+        name: name,
+        firstname: firstname,
+        age: age
+    };
+    return await StudentModel.create(student);
+}
 
-const updateStudent = async (id: string, studentToUpdate: Student) => {
-  await StudentModel.updateOne(
-    {
-      _id: new Types.ObjectId(id),
-    },
-    studentToUpdate
-  );
-  return await getStudents();
-};
+export const updateStudent = async (id: string, body: Student) => {
+    await StudentModel.updateOne({ _id: new Types.ObjectId(id) }, body);
+    return await getStudents();
+}
 
-const deleteStudent = async (id: string) => {
-  await StudentModel.deleteOne({ _id: new Types.ObjectId(id) });
-};
-
-export {
-  getStudents,
-  getStudent,
-  createStudent,
-  updateStudent,
-  deleteStudent,
-};
+export const deleteStudent = async (id: string) => {
+    await StudentModel.deleteOne({ _id: new Types.ObjectId(id) });
+    return await getStudents();
+}
