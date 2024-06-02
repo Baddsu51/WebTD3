@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { Hello } from "./Hello";
+import { Button } from "antd";
 
 export const Demo = () => {
   const [name, setName] = useState("John Doe");
@@ -46,6 +47,11 @@ export const Demo = () => {
             </li>
           ))}
         </ol>
+      </div>
+      <div>
+        <Button type="primary">
+          Ceci est un bouton de la librairie Ant Design
+        </Button>
       </div>
     </>
   );
